@@ -1,0 +1,5 @@
+##001. pom.xml 설정 (spring 4버전은 security 4버전대로)
+spring-security-web/ spring-security-config/ spring-security-core/ spring-security-taglibs 설정
+
+##002. web.xml 설정[pom.xml(di), web.xml] // web: 너 이거 있어? controller 아니면 어디로 갈래? root: db servlet : controller
+##003. security-context.xml 설정
