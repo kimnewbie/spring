@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd"><!-- 뒤에 버전 지움 -->
+	
+	<bean id="SuccessHandler" class="com.company.security.LoginSuccessHandler"/><!-- 로그인 성공시 처리 -->
+	<bean id="DeniedHandler" class="com.company.security.DeniedHandler"/><!-- 로그인 실패시 처리 -->
+	<bean id="customUserDetails" class="com.company.security.CustomUserDetailsService"/><!-- 아이디 비번 받아서 번호 처리:security:authentication-manager:db설정 -->
+	<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/><!-- 암호화 -->
+	
+	<security:http>
+		<security:intercept-url pattern="/security/all" access="permitAll"/>
+		<security:intercept-url pattern="/security/member" access="hasRole('ROLE_MEMBER')"/>
+		<security:intercept-url pattern="/security/admin" access="hasRole('ROLE_ADMIN')"/>
+		<security:access-denied-handler ref="DeniedHandler"/>
+		<security:form-login login-page="/security/mylogin" authentication-success-handler-ref="SuccessHandler"/>
+	</security:http><!-- login-page="로그인페이지 지정으로 만들기" authentication-success-handler-ref="성공시처리" -->
+	
+	<security:authentication-manager>
+		<security:authentication-provider user-service-ref="customUserDetails"> <!-- 아이디와 비번처리 -->
+			<security:password-encoder ref="bcryptPasswordEncoder"/> <!-- 비밀번호 암호화 -->
+		</security:authentication-provider>
+	</security:authentication-manager>
+</beans>
